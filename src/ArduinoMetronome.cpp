@@ -50,6 +50,11 @@ bool ArduinoMetronome::loopMs()
 {
     nowTime = millis();
 
+    if(nowTime<startupDelay)
+    {
+        return false;
+    }
+
     if(nowTime >= (lastTime + tInterval))
     {
         lastTime = nowTime;
@@ -72,6 +77,11 @@ bool ArduinoMetronome::loopMs(int interval)
 {
     nowTime = millis();
 
+    if(nowTime<startupDelay)
+    {
+        return false;
+    }
+
     if(nowTime >= (lastTime + interval))
     {
         lastTime = nowTime;
@@ -83,5 +93,17 @@ bool ArduinoMetronome::loopMs(int interval)
     }
         
 }
+
+/**
+ * @brief Metronome starts after setuped delay
+ * 
+ * @param ms 
+ */
+void ArduinoMetronome::startupDelayMs(int ms)
+{
+    startupDelay = ms;
+    startupDelayNow = millis();
+}
+
 
 
