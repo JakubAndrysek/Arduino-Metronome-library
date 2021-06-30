@@ -6,10 +6,12 @@
  * 
  * @param interval in ms
  */
-ArduinoMetronome::ArduinoMetronome(int interval)
+ArduinoMetronome::ArduinoMetronome(int interval, int countMax)
 {
     tInterval = interval;
     lastTime = millis();
+    counterNow = 0;
+    counterMax = countMax;
 }
 
 /**
@@ -19,6 +21,7 @@ ArduinoMetronome::ArduinoMetronome(int interval)
 ArduinoMetronome::ArduinoMetronome()
 {
     lastTime = millis();
+    counterNow = 0;
 }
 
 /**
@@ -26,7 +29,7 @@ ArduinoMetronome::ArduinoMetronome()
  * 
  * @param interval in ms
  */
-void ArduinoMetronome::setInterval(int interval)
+void ArduinoMetronome::intervalSet(int interval)
 {
     tInterval = interval;
 }
@@ -36,10 +39,56 @@ void ArduinoMetronome::setInterval(int interval)
  * 
  * @return int 
  */
-int ArduinoMetronome::getInterval()
+int ArduinoMetronome::intervalGet()
 {
     return tInterval;
 }
+
+////////////////////////////////////////////////////////////////////
+
+
+void ArduinoMetronome::counterMaxSet(int countMax) {
+    counterMax = counterMax;
+}
+
+int ArduinoMetronome::counterMaxGet() {
+    return counterMax;
+}
+
+/**
+ * @brief Reset counter to 0
+ * 
+ */
+void ArduinoMetronome::counterNowReset() {
+    counterNow = 0;
+}
+
+int ArduinoMetronome::counterNowGet() {
+    return counterNow;
+}
+
+/**
+ * @brief Increase actual counter by 1
+ * 
+ */
+void ArduinoMetronome::counterNowIncrease() {
+    ++counterNow;
+}
+
+bool ArduinoMetronome::counterLoop() {
+    if(counterNow <= counterMax) {
+        return true;
+    }
+
+    return false;
+}
+
+bool ArduinoMetronome::incCounterLoop() {
+    counterNowIncrease();
+    return counterLoop();
+}
+
+// void ArduinoMetronome::
 
 /**
  * @brief Metronome loop
@@ -47,7 +96,7 @@ int ArduinoMetronome::getInterval()
  * @return bool
  */
 bool ArduinoMetronome::loopMs()
-{
+{    
     nowTime = millis();
 
     if(nowTime<startupDelay)
@@ -67,31 +116,8 @@ bool ArduinoMetronome::loopMs()
         
 }
 
-/**
- * @brief Metronome loop (custom interval)
- * 
- * @param interval in ms 
- * @return bool 
- */
-bool ArduinoMetronome::loopMs(int interval)
-{
-    nowTime = millis();
-
-    if(nowTime<startupDelay)
-    {
-        return false;
-    }
-
-    if(nowTime >= (lastTime + interval))
-    {
-        lastTime = nowTime;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-        
+bool ArduinoMetronome::loopMsCounter() {
+    return loopMs() && incCounterLoop();
 }
 
 /**
@@ -104,6 +130,7 @@ void ArduinoMetronome::startupDelayMs(int ms)
     startupDelay = ms;
     startupDelayNow = millis();
 }
+
 
 
 
