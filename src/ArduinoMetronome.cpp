@@ -46,6 +46,13 @@ int ArduinoMetronome::intervalGet()
 
 ////////////////////////////////////////////////////////////////////
 
+void ArduinoMetronome::timeReset()
+{
+    lastTime = millis();
+}
+
+////////////////////////////////////////////////////////////////////
+
 
 void ArduinoMetronome::counterMaxSet(int countMax) {
     counterMax = counterMax;

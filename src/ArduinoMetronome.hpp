@@ -20,6 +20,8 @@ public:
     
     void intervalSet(int interval);
     int intervalGet();
+
+    void timeReset();
     
     void startupDelayMs(int millis);
     
@@ -34,6 +36,7 @@ public:
     bool incCounterLoop();
     bool loopMs();
     bool loopMsCounter();
+
   
 
 };
